@@ -2,6 +2,18 @@ const fs = require("fs");
 const fmt = require("simple-fmt");
 const exec = require("child_process").exec;
 const diff = require("diff");
+const defs = require("./defs-main");
+
+const esprima = require("esprima");
+const recast = require("recast");
+
+function makeAst(filePath) {
+  const source = fs.readFileSync(filePath, "utf8");
+  return recast.parse(source, {
+    esprima: esprima,
+    range: true
+  });
+}
 
 function slurp(filename) {
     return fs.existsSync(filename) ? String(fs.readFileSync(filename)) : "";
@@ -37,6 +49,8 @@ function run(test) {
         diffOutput(expectedStdout, stdout, fmt("{0}-out.js", test));
         diffOutput(expectedStderr, stderr, fmt("{0}-stderr", test));
     });
+
+    console.log(defs(makeAst(fmt("{0}/{1}", pathToTests, test)), {ast:true}));
 }
 
 const NODE = process.argv[0];

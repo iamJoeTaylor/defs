@@ -19,7 +19,8 @@
     "esprima": "git://github.com/ariya/esprima.git#harmony"
   },
   "devDependencies": {
-    "diff": "~1.0.8"
+    "diff": "~1.0.8",
+    "recast": "^0.5.25"
   },
   "keywords": [
     "defs",
